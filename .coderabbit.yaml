@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+inheritance: true
+
+knowledge_base:
+  jira:
+    usage: "enabled"
+    project_keys:
+      - "CDL"
+
+chat:
+  integrations:
+    jira:
+      usage: "enabled"
+
+reviews:
+  post_merge_actions:
+    - name: "Create operational launch-readiness task"
+      enabled: true
+      prompt: |
+        Review the PR title, description, summary, and merged diff. Apply this
+        action only when the PR introduces or materially changes a customer-facing
+        operational commitment, such as delivery time or SLA, pricing or
+        surcharges, eligibility rules, fulfillment, or priority processing.
+
+        Do not apply this action to project bootstrap or setup PRs that introduce
+        the initial application or this configuration. Also do nothing for internal
+        refactors, tests, documentation-only changes, or changes without an
+        operational impact.
+
+        Use the connected Jira integration. Search project CDL for an existing
+        issue containing this PR URL. If one exists, do not create a duplicate;
+        report the existing issue instead.
+
+        Otherwise, create exactly one Task in project CDL with the summary:
+        "Launch readiness: <short customer-facing change> — <repository>#<PR number>"
+
+        Write the description in plain language with these sections:
+        - What shipped: summarize the customer-facing change and its value.
+        - Customer impact: explain who is affected and what changes for them.
+        - Operational readiness: include only relevant checklist items for the
+          promised service level, cutoff and exceptions, eligibility, pricing,
+          fulfillment, support guidance, communications, and monitoring.
+        - Source: include the PR URL, merge commit, and relevant file paths.
+
+        Omit checklist categories that do not apply. Treat readiness items as work
+        to verify, not as completed facts. Do not invent an assignee, priority,
+        sprint, component, due date, or approval.
