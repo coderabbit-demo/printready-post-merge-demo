@@ -4,6 +4,7 @@ Notable customer-facing changes to PrintReady are documented here.
 
 ## Unreleased
 
+- **Volume discounts** — Customers ordering 5, 10, or 25 items now see automatic savings of up to 15% applied to their quote before any rush surcharge. ([#4](https://github.com/coderabbit-demo/printready-post-merge-demo/pull/4))
 - **Rush printing** — Customers with eligible designs can select 24-hour production directly from their quote for a clearly displayed 30% surcharge. ([#3](https://github.com/coderabbit-demo/printready-post-merge-demo/pull/3))
 
 ## 1.1.0 — 2026-08-28
