@@ -138,6 +138,7 @@
 
       .price { margin: 0; font-size: 42px; font-weight: 850; letter-spacing: -0.05em; }
       .turnaround { margin: 4px 0 0; color: #52615f; }
+      .savings { margin: 10px 0 0; color: #347f75; font-size: 14px; font-weight: 750; }
       .unavailable { background: #fff1ed; }
       .unavailable .eyebrow { color: #a6472f; }
       .unavailable .price { font-size: 20px; letter-spacing: -0.02em; }
@@ -177,6 +178,14 @@
           <option value="petg">PETG — extra durable</option>
         </select>
 
+        <label for="quantity">Quantity</label>
+        <select id="quantity">
+          <option value="1">1 item</option>
+          <option value="5">5 items — save 5%</option>
+          <option value="10">10 items — save 10%</option>
+          <option value="25">25 items — save 15%</option>
+        </select>
+
         <fieldset>
           <legend>Delivery</legend>
           <label class="rush-option" for="rush">
@@ -194,6 +203,7 @@
 
       const design = document.querySelector("#design");
       const material = document.querySelector("#material");
+      const quantity = document.querySelector("#quantity");
       const rush = document.querySelector("#rush");
       const result = document.querySelector("#result");
 
@@ -201,16 +211,17 @@
         const quote = calculateQuote({
           design: design.value,
           material: material.value,
+          quantity: quantity.value,
           rush: rush.checked,
         });
 
         result.classList.toggle("unavailable", !quote.available);
         result.innerHTML = quote.available
-          ? `<p class="eyebrow">Estimated total</p><p class="price">$${quote.total.toFixed(2)}</p><p class="turnaround">${quote.turnaround}</p>`
+          ? `<p class="eyebrow">Estimated total · ${quote.quantity} ${quote.quantity === 1 ? "item" : "items"}</p><p class="price">$${quote.total.toFixed(2)}</p><p class="turnaround">${quote.turnaround}</p>${quote.savings > 0 ? `<p class="savings">Volume savings: $${quote.savings.toFixed(2)} (${quote.discountRate * 100}% off)</p>` : ""}`
           : `<p class="eyebrow">Standard delivery only</p><p class="price">${quote.message}</p><p class="turnaround">Choose another design or turn off rush printing.</p>`;
       }
 
-      [design, material, rush].forEach((control) => control.addEventListener("change", updateQuote));
+      [design, material, quantity, rush].forEach((control) => control.addEventListener("change", updateQuote));
       updateQuote();
     </script>
   </body>
