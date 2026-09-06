@@ -1,6 +1,6 @@
 # PrintReady
 
-PrintReady is a compact 3D-printing quote app and a working example of a CodeRabbit Post-Merge Action. The app starts with standard printing; a follow-up pull request introduces rush printing and demonstrates how CodeRabbit creates the corresponding operational launch task in Jira after merge.
+PrintReady is a compact 3D-printing quote app and a working example of a CodeRabbit Post-Merge Action. Customers can compare standard delivery with 24-hour rush printing; after the feature merges, CodeRabbit creates the corresponding operational launch task in Jira.
 
 ## What the action creates
 
@@ -21,18 +21,12 @@ python3 -m http.server 8000
 
 Open `http://localhost:8000`. No dependencies or build step are required.
 
-Run the quote tests with:
+## See the workflow
 
-```sh
-node --test
-```
-
-## Reproduce the workflow
-
-1. Merge this baseline application and `.coderabbit.yaml` into the default branch.
-2. Open a new PR that introduces a customer-facing operational change, such as 24-hour rush printing.
-3. Confirm that CodeRabbit shows **Create operational launch-readiness task** under Post-Merge Actions.
-4. Merge the PR and review the Jira Task generated from the final change.
+1. Review the PR introducing 24-hour rush printing.
+2. Confirm that CodeRabbit shows **Create operational launch-readiness task** under Post-Merge Actions.
+3. Merge the PR into the default branch.
+4. Review the Jira Task generated from the final change.
 
 ## Use it in your environment
 
