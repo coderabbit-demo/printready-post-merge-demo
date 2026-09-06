@@ -19,7 +19,7 @@ export function calculateQuote({ design, material, quantity = 1, rush = false })
   const materialMultiplier = MATERIAL_MULTIPLIERS[material];
   const itemCount = Number(quantity);
 
-  if (!selectedDesign || !materialMultiplier || !Number.isInteger(itemCount) || itemCount < 1) {
+  if (!selectedDesign || !materialMultiplier || !Number.isInteger(itemCount) || itemCount < 1 || itemCount > 25) {
     throw new TypeError("Choose a supported design, material, and quantity.");
   }
 
