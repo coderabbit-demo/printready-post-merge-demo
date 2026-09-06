@@ -76,7 +76,7 @@
       .quote { padding: 52px; }
       .quote h2 { margin: 0 0 30px; font-size: 24px; }
 
-      label {
+      label, legend {
         display: block;
         margin-bottom: 8px;
         font-size: 13px;
@@ -95,6 +95,29 @@
         color: inherit;
         font: inherit;
       }
+
+      fieldset {
+        margin: 4px 0 26px;
+        padding: 0;
+        border: 0;
+      }
+
+      .rush-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px;
+        border: 1px solid #f9a826;
+        border-radius: 14px;
+        background: #fff9ec;
+        cursor: pointer;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+
+      .rush-option input { width: 18px; height: 18px; accent-color: #e88e05; }
+      .rush-option strong { display: block; }
+      .rush-option small { color: #66706f; font-weight: 500; }
 
       .result {
         min-height: 142px;
@@ -115,6 +138,9 @@
 
       .price { margin: 0; font-size: 42px; font-weight: 850; letter-spacing: -0.05em; }
       .turnaround { margin: 4px 0 0; color: #52615f; }
+      .unavailable { background: #fff1ed; }
+      .unavailable .eyebrow { color: #a6472f; }
+      .unavailable .price { font-size: 20px; letter-spacing: -0.02em; }
 
       @media (max-width: 720px) {
         body { padding: 16px; }
@@ -129,10 +155,10 @@
       <section class="intro">
         <div>
           <div class="brand">Print<span>Ready</span></div>
-          <h1>Ideas, made real.</h1>
+          <h1>Ideas, made faster.</h1>
           <p>Choose your design and material. Get a clear price and delivery estimate in seconds.</p>
         </div>
-        <div class="promise">Made to order · Ready in 3–5 business days</div>
+        <div class="promise">Now offering 24-hour rush printing</div>
       </section>
 
       <section class="quote" aria-labelledby="quote-heading">
@@ -151,6 +177,14 @@
           <option value="petg">PETG — extra durable</option>
         </select>
 
+        <fieldset>
+          <legend>Delivery</legend>
+          <label class="rush-option" for="rush">
+            <input id="rush" type="checkbox" checked />
+            <span><strong>Rush printing</strong><small>Ready within 24 hours · 30% surcharge</small></span>
+          </label>
+        </fieldset>
+
         <div class="result" id="result" role="status" aria-live="polite"></div>
       </section>
     </main>
@@ -160,14 +194,23 @@
 
       const design = document.querySelector("#design");
       const material = document.querySelector("#material");
+      const rush = document.querySelector("#rush");
       const result = document.querySelector("#result");
 
       function updateQuote() {
-        const quote = calculateQuote({ design: design.value, material: material.value });
-        result.innerHTML = `<p class="eyebrow">Estimated total</p><p class="price">$${quote.total.toFixed(2)}</p><p class="turnaround">${quote.turnaround}</p>`;
+        const quote = calculateQuote({
+          design: design.value,
+          material: material.value,
+          rush: rush.checked,
+        });
+
+        result.classList.toggle("unavailable", !quote.available);
+        result.innerHTML = quote.available
+          ? `<p class="eyebrow">Estimated total</p><p class="price">$${quote.total.toFixed(2)}</p><p class="turnaround">${quote.turnaround}</p>`
+          : `<p class="eyebrow">Standard delivery only</p><p class="price">${quote.message}</p><p class="turnaround">Choose another design or turn off rush printing.</p>`;
       }
 
-      [design, material].forEach((control) => control.addEventListener("change", updateQuote));
+      [design, material, rush].forEach((control) => control.addEventListener("change", updateQuote));
       updateQuote();
     </script>
   </body>
